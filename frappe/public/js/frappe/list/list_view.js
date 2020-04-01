@@ -1334,6 +1334,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 			return frappe.perm.has_perm(doctype, 0, 'submit');
 		};
 
+		const has_email_permission = (doctype) => {
+			return frappe.perm.has_perm(doctype, 0 , 'email');
+		}
+
 		// utility
 		const bulk_assignment = () => {
 			return {
@@ -1358,6 +1362,14 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 				standard: true
 			};
 		};
+		
+		const bulk_email = () => {
+			return {
+				label: __('Email'),
+				action: () => bulk_operations.email(this.get_checked_items(), this.refresh),
+				standard: false
+			}
+		}
 
 		const bulk_delete = () => {
 			return {
@@ -1432,6 +1444,10 @@ frappe.views.ListView = class ListView extends frappe.views.BaseList {
 		// bulk printing
 		if (frappe.model.can_print(doctype)) {
 			actions_menu_items.push(bulk_printing());
+		}
+
+		if (has_email_permission(doctype)) {
+			actions_menu_items.push(bulk_email());
 		}
 
 		// bulk submit
