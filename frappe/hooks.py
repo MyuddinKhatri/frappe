@@ -316,6 +316,13 @@ user_privacy_documents = [
 
 ]
 
+contact_fields = {
+	'Purchase Order' : 'Supplier',
+	'Purchase Invoice' : 'Supplier',
+	'Sales Order' : 'Customer',
+	'Sales Invoice' : 'Customer'
+}
+
 global_search_doctypes = {
 	"Default": [
 		{"doctype": "Contact"},

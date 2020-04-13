@@ -78,18 +78,11 @@ def show_progress(docnames, message, i, description):
 def get_contact(name, doctype):
 	out = frappe._dict()
 
-	if doctype == "Purchase Order":
-		name = frappe.db.get_value("Purchase Order", name, ["supplier"])
-		doctype = "Supplier"
-	elif doctype == "Purchase Invoice":
-		name = frappe.db.get_value("Purchase Invoice", name, ["supplier"])
-		doctype = "Supplier"
-	elif doctype == "Sales Order":
-		name = frappe.db.get_value("Sales Order", name, ["customer"])
-		doctype = "Customer"
-	elif doctype == "Sales Invoice":
-		name = frappe.db.get_value("Sales Invoice", name, ["customer"])
-		doctype = "Customer"
+	contact_field = frappe.get_hooks("contact_fields").get(doctype) or {}
+	if contact_field:
+		name = frappe.db.get_value(doctype, name, contact_field)
+		doctype = contact_field
+
 	get_default_contact(out, name, doctype)
 
 	return out
