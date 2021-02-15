@@ -60,7 +60,12 @@ frappe.form.formatters = {
 		</span>`;
 	},
 	Currency: function (value, docfield, options, doc) {
-		var currency  = frappe.meta.get_field_currency(docfield, doc);
+		if (doc.Company) {
+			var currency = frappe.get_doc(":Company", doc.Company).default_currency;
+		}
+		else {
+			var currency  = frappe.meta.get_field_currency(docfield, doc);
+		}
 		var precision = docfield.precision || cint(frappe.boot.sysdefaults.currency_precision) || 2;
 
 		// If you change anything below, it's going to hurt a company in UAE, a bit.
